@@ -1,0 +1,2 @@
+# Homeschool_Co_Op_Resource_Center
+Automated website repository for Homeschool_Co_Op_Resource_Center
