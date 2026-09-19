@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classes | Homeschool Co-Op & Resource Center</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+
+        .filter-bar {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            padding: 1.5rem;
+            background: var(--bg-surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            margin-top: 3rem;
+            position: relative;
+            z-index: 10;
+        }
+        .filter-select {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .class-card {
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-surface);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            border: 1px solid var(--border-light);
+        }
+        .class-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
+        .class-img { height: 200px; width: 100%; object-fit: cover; }
+        .class-body { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; }
+        .class-meta { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+        .class-card h3 {
+            font-size: 1.3rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 0.5rem;
+        }
+        .mt-auto { margin-top: auto !important; }
+
+        .schedule-wrapper { overflow-x: auto; }
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: 120px repeat(5, minmax(150px, 1fr));
+            gap: 1px;
+            background: var(--border-light);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+        }
+        .schedule-grid > .schedule-cell:nth-child(6n + 1) {
+            white-space: nowrap;
+            font-weight: 500;
+        }
+        @media (max-width: 768px) {
+            .schedule-grid { display: flex; flex-direction: column; gap: 0.5rem; background: transparent; border: none; }
+            .schedule-header { display: none; }
+            .schedule-cell:empty { display: none; }
+            .schedule-grid > .schedule-cell:nth-child(6n + 1) {
+                background: transparent;
+                font-weight: 700;
+                font-size: 1.1rem;
+                padding: 1.5rem 0.5rem 0.25rem 0.5rem;
+                text-align: left;
+            }
+            .schedule-cell:not(:nth-child(6n + 1)) {
+                padding: 0;
+                background: transparent;
+            }
+            .schedule-item { margin-bottom: 0; }
+        }
+        .schedule-cell { background: var(--bg-surface); padding: 1rem; text-align: center; }
+        .schedule-header { font-weight: 600; background: var(--bg-secondary); }
+        .schedule-item { background: rgba(142,168,150,0.1); border-left: 4px solid var(--accent-primary); padding: 0.5rem; margin-bottom: 0.5rem; border-radius: var(--radius-sm); text-align: left; }
+        [dir="rtl"] .schedule-item { border-left: none; border-right: 4px solid var(--accent-primary); text-align: right; }
+        
+        @media (min-width: 769px) {
+            .mobile-day { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR (Re-use structure) -->
+    <nav class="navbar" id="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="brand">
+                <img src="assets/images/logo.svg" alt="Homeschool Co-Op Logo" class="brand-logo">
+                <div class="brand-text-wrapper">
+                    <span class="brand-title">Homeschool Co-Op</span>
+                    <span class="brand-subtitle">Resource Center</span>
+                </div>
+            </a>
+            <div class="nav-links">
+                <div class="nav-item-dropdown">
+                    <span class="nav-link " style="display:flex; align-items:center; gap:0.25rem;">Home <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
+                    <div class="nav-dropdown-menu">
+                        <a href="index.html" class="dropdown-link ">Home 1</a>
+                        <a href="home-2.html" class="dropdown-link ">Home 2</a>
+                    </div>
+                </div>
+                <a href="about.html" class="nav-link ">About</a>
+                <a href="classes.html" class="nav-link active">Classes</a>
+                <a href="membership.html" class="nav-link ">Membership</a>
+                <a href="resources.html" class="nav-link ">Resources</a>
+                <a href="community.html" class="nav-link ">Community</a>
+                <a href="contact.html" class="nav-link ">Contact</a>
+                <a href="dashboard.html" class="nav-link ">Dashboard</a>
+            </div>
+            <div class="nav-actions">
+                <button class="btn-icon" id="theme-toggle" aria-label="Toggle Theme">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                </button>
+                <button class="btn-icon" id="rtl-toggle" aria-label="Toggle RTL">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                </button>
+                <a href="login.html" class="btn btn-secondary">Login</a>
+            </div>
+            <button class="hamburger" id="hamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- MOBILE DRAWER -->
+    <div class="mobile-drawer" id="mobile-drawer">
+        <div class="mobile-nav-links">
+            <div class="mobile-nav-item-dropdown" style="display: flex; flex-direction: column; align-items: center;">
+                <button class="mobile-nav-link active" id="mobile-home-dropdown-btn" style="display:flex; justify-content:center; align-items:center; gap: 0.5rem; background:none; border:none; cursor:pointer; padding: 0;">
+                    <span>Home</span>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dropdown-arrow" style="transition: transform 0.3s;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </button>
+                <div class="mobile-nav-dropdown-menu" id="mobile-home-dropdown-menu" style="display: none; flex-direction: column; align-items: center; gap: 1rem; margin-top: 1rem;">
+                    <a href="index.html" class="mobile-nav-link active" style="font-size: 1.5rem; color: var(--text-secondary);">Home 1</a>
+                    <a href="home-2.html" class="mobile-nav-link " style="font-size: 1.5rem; color: var(--text-secondary);">Home 2</a>
+                </div>
+            </div>
+            <a href="about.html" class="mobile-nav-link ">About</a>
+            <a href="classes.html" class="mobile-nav-link ">Classes</a>
+            <a href="membership.html" class="mobile-nav-link ">Membership</a>
+            <a href="resources.html" class="mobile-nav-link ">Resources</a>
+            <a href="community.html" class="mobile-nav-link ">Community</a>
+            <a href="contact.html" class="mobile-nav-link ">Contact</a>
+            <a href="dashboard.html" class="mobile-nav-link ">Dashboard</a>
+        </div>
+        <div class="mobile-nav-actions" style="display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 250px;">
+            <div class="flex gap-6 justify-center" style="margin-bottom: 1rem;">
+                <button class="btn-icon" id="mobile-theme-toggle" aria-label="Toggle Theme">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                </button>
+                <button class="btn-icon" id="mobile-rtl-toggle" aria-label="Toggle RTL">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10h14" /><path d="M15 6l4 4-4 4" /><path d="M19 14H5" /><path d="M9 10l-4 4 4 4" /></svg>
+                </button>
+            </div>
+            <a href="login.html" class="btn btn-primary" style="width: 100%; justify-content: center;">Parent Login</a>
+        </div>
+    </div>
+
+    <main>
+
+
+    <main>
+        <!-- SECTION 01: HERO -->
+        <section class="page-hero">
+            <div class="container reveal">
+                <span class="eyebrow">Our Programs</span>
+                <h1>Discover Learning That Fits Your Family</h1>
+                <p>Explore our flexible co-op classes designed for curiosity and collaboration.</p>
+            </div>
+        </section>
+
+        <!-- SECTION 02: CLASS EXPLORER (FILTERS) -->
+        <div class="container relative z-10 reveal">
+            <div class="filter-bar">
+                <select class="form-control filter-select" id="filter-age">
+                    <option value="all">All Ages</option>
+                    <option value="5-8">Ages 5-8</option>
+                    <option value="8-12">Ages 8-12</option>
+                    <option value="12-16">Ages 12-16</option>
+                </select>
+                <select class="form-control filter-select" id="filter-subject">
+                    <option value="all">All Subjects</option>
+                    <option value="stem">STEM</option>
+                    <option value="arts">Arts</option>
+                    <option value="literature">Literature</option>
+                </select>
+                <select class="form-control filter-select" id="filter-day">
+                    <option value="all">Any Day</option>
+                    <option value="monday">Monday</option>
+                    <option value="wednesday">Wednesday</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- SECTION 03: FEATURED CLASSES -->
+        <section class="section-py">
+            <div class="container">
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="class-grid">
+                    <!-- Class 1 -->
+                    <div class="class-card reveal" data-age="8-12" data-subject="stem" data-day="monday">
+                        <img src="assets/images/Young Explorers Science Lab.png" class="class-img" alt="Science">
+                        <div class="class-body">
+                            <div class="class-meta">
+                                <span class="badge">Ages 8-12</span>
+                                <span class="tag">STEM</span>
+                            </div>
+                            <h3>Young Explorers Science Lab</h3>
+                            <p class="text-sm">Hands-on experiments focusing on biology and chemistry fundamentals.</p>
+                            <div class="mt-auto">
+                                <p class="text-xs text-muted mb-4">Instructor: Sarah M. | Mon 10:00 AM</p>
+                                <button class="btn btn-primary" data-modal-target="modal-enroll" style="width: 100%;">Enroll</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Class 2 -->
+                    <div class="class-card reveal reveal-delay-1" data-age="12-16" data-subject="literature" data-day="wednesday">
+                        <img src="assets/images/Creative Storytelling.png" class="class-img" alt="Literature">
+                        <div class="class-body">
+                            <div class="class-meta">
+                                <span class="badge">Ages 12-16</span>
+                                <span class="tag">Literature</span>
+                            </div>
+                            <h3>Creative Storytelling</h3>
+                            <p class="text-sm">Develop narrative structures and creative writing techniques.</p>
+                            <div class="mt-auto">
+                                <p class="text-xs text-muted mb-4">Instructor: David K. | Wed 1:00 PM</p>
+                                <button class="btn btn-primary" data-modal-target="modal-enroll" style="width: 100%;">Enroll</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Class 3 -->
+                    <div class="class-card reveal reveal-delay-2" data-age="5-8" data-subject="arts" data-day="monday">
+                        <img src="assets/images/Art Studio Collective.png" class="class-img" alt="Art">
+                        <div class="class-body">
+                            <div class="class-meta">
+                                <span class="badge">Ages 5-8</span>
+                                <span class="tag">Arts</span>
+                            </div>
+                            <h3>Art Studio Collective</h3>
+                            <p class="text-sm">Messy, creative fun exploring different mediums.</p>
+                            <div class="mt-auto">
+                                <p class="text-xs text-muted mb-4">Instructor: Elena R. | Mon 11:30 AM</p>
+                                <button class="btn btn-primary" data-modal-target="modal-enroll" style="width: 100%;">Enroll</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Class 4 -->
+                    <div class="class-card reveal" data-age="5-8" data-subject="stem" data-day="wednesday">
+                        <img src="assets/images/Nature Detectives.png" class="class-img" alt="Nature">
+                        <div class="class-body">
+                            <div class="class-meta">
+                                <span class="badge">Ages 5-8</span>
+                                <span class="tag">STEM</span>
+                            </div>
+                            <h3>Nature Detectives</h3>
+                            <p class="text-sm">Explore local flora and fauna through outdoor adventures and ecological studies.</p>
+                            <div class="mt-auto">
+                                <p class="text-xs text-muted mb-4">Instructor: Mark T. | Wed 10:00 AM</p>
+                                <button class="btn btn-primary" data-modal-target="modal-enroll" style="width: 100%;">Enroll</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Class 5 -->
+                    <div class="class-card reveal reveal-delay-1" data-age="12-16" data-subject="stem" data-day="tuesday">
+                        <img src="assets/images/Junior Coding.png" class="class-img" alt="Coding">
+                        <div class="class-body">
+                            <div class="class-meta">
+                                <span class="badge">Ages 12-16</span>
+                                <span class="tag">STEM</span>
+                            </div>
+                            <h3>Junior Coding</h3>
+                            <p class="text-sm">Introduction to programming logic and building interactive games using Scratch and Python.</p>
+                            <div class="mt-auto">
+                                <p class="text-xs text-muted mb-4">Instructor: Alex R. | Tue 1:00 PM</p>
+                                <button class="btn btn-primary" data-modal-target="modal-enroll" style="width: 100%;">Enroll</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Class 6 -->
+                    <div class="class-card reveal reveal-delay-2" data-age="all" data-subject="literature" data-day="friday">
+                        <img src="assets/images/Open Library.png" class="class-img" alt="Library">
+                        <div class="class-body">
+                            <div class="class-meta">
+                                <span class="badge" style="background: var(--bg-surface); border: 1px solid var(--border-light); color: var(--text-muted);">All Ages</span>
+                                <span class="tag">Literature</span>
+                            </div>
+                            <h3>Open Library</h3>
+                            <p class="text-sm">A quiet space for reading, research, and collaborative study time for all families.</p>
+                            <div class="mt-auto">
+                                <p class="text-xs text-muted mb-4">Instructor: Community | Fri 10:00 AM</p>
+                                <button class="btn btn-primary" data-modal-target="modal-enroll" style="width: 100%;">Enroll</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 04: WEEKLY SCHEDULE -->
+        <section class="section-py" style="background: var(--bg-secondary);">
+            <div class="container reveal">
+                <h2 class="mb-8">Weekly Schedule</h2>
+                <div class="schedule-wrapper">
+                    <div class="schedule-grid">
+                        <!-- Headers -->
+                        <div class="schedule-cell schedule-header">Time</div>
+                        <div class="schedule-cell schedule-header">Monday</div>
+                        <div class="schedule-cell schedule-header">Tuesday</div>
+                        <div class="schedule-cell schedule-header">Wednesday</div>
+                        <div class="schedule-cell schedule-header">Thursday</div>
+                        <div class="schedule-cell schedule-header">Friday</div>
+                        
+                        <!-- Row 1 -->
+                        <div class="schedule-cell">10:00 AM</div>
+                        <div class="schedule-cell">
+                            <div class="schedule-item">Young Explorers<br><small><span class="mobile-day">Mon &bull; </span>Ages 8-12</small></div>
+                        </div>
+                        <div class="schedule-cell"></div>
+                        <div class="schedule-cell">
+                            <div class="schedule-item">Nature Detectives<br><small><span class="mobile-day">Wed &bull; </span>Ages 5-8</small></div>
+                        </div>
+                        <div class="schedule-cell"></div>
+                        <div class="schedule-cell">
+                            <div class="schedule-item">Open Library<br><small><span class="mobile-day">Fri &bull; </span>All Ages</small></div>
+                        </div>
+
+                        <!-- Row 2 -->
+                        <div class="schedule-cell">1:00 PM</div>
+                        <div class="schedule-cell"></div>
+                        <div class="schedule-cell">
+                            <div class="schedule-item">Junior Coding<br><small><span class="mobile-day">Tue &bull; </span>Ages 12-16</small></div>
+                        </div>
+                        <div class="schedule-cell">
+                            <div class="schedule-item">Creative Storytelling<br><small><span class="mobile-day">Wed &bull; </span>Ages 12-16</small></div>
+                        </div>
+                        <div class="schedule-cell">
+                            <div class="schedule-item">Art Studio<br><small><span class="mobile-day">Thu &bull; </span>Ages 5-8</small></div>
+                        </div>
+                        <div class="schedule-cell"></div>
+
+                        <!-- Row 3 -->
+                        <div class="schedule-cell">3:00 PM</div>
+                        <div class="schedule-cell">
+                            <div class="schedule-item">Math Mentors<br><small><span class="mobile-day">Mon &bull; </span>Ages 8-12</small></div>
+                        </div>
+                        <div class="schedule-cell"></div>
+                        <div class="schedule-cell">
+                            <div class="schedule-item">History Club<br><small><span class="mobile-day">Wed &bull; </span>Ages 12-16</small></div>
+                        </div>
+                        <div class="schedule-cell"></div>
+                        <div class="schedule-cell">
+                            <div class="schedule-item">Music Makers<br><small><span class="mobile-day">Fri &bull; </span>Ages 5-8</small></div>
+                        </div>
+
+                        <!-- Row 4 -->
+                        <div class="schedule-cell">4:00 PM</div>
+                        <div class="schedule-cell"></div>
+                        <div class="schedule-cell">
+                            <div class="schedule-item">Robotics Basics<br><small><span class="mobile-day">Tue &bull; </span>Ages 8-12</small></div>
+                        </div>
+                        <div class="schedule-cell"></div>
+                        <div class="schedule-cell">
+                            <div class="schedule-item">Debate Team<br><small><span class="mobile-day">Thu &bull; </span>Ages 12-16</small></div>
+                        </div>
+                        <div class="schedule-cell">
+                            <div class="schedule-item">Yoga & Mindfulness<br><small><span class="mobile-day">Fri &bull; </span>All Ages</small></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- SECTION 05: ENROLLMENT MODAL -->
+    <div class="modal-overlay" id="modal-enroll">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h3 class="mb-4">Class Enrollment</h3>
+            <form>
+                <div class="form-group">
+                    <label class="form-label">Parent Name</label>
+                    <input type="text" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Child Name & Age</label>
+                    <input type="text" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Select Class</label>
+                    <select class="form-control">
+                        <option>Young Explorers Science Lab</option>
+                        <option>Creative Storytelling</option>
+                        <option>Art Studio Collective</option>
+                        <option>Nature Detectives</option>
+                        <option>Junior Coding</option>
+                        <option>Open Library</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Notes / Accommodations</label>
+                    <input type="text" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Continue Enrollment</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- FOOTER Placeholder -->
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <a href="index.html" class="brand mb-6" style="display: inline-flex;">
+                        <img src="assets/images/logo.svg" alt="Logo" width="40" height="40">
+                        <span class="brand-title" style="font-size: 1.1rem;">Homeschool Co-Op</span>
+                    </a>
+                    <p class="text-sm" style="line-height: 1.6; margin-bottom: 1.5rem;">A community where families learn, share, and grow together. We provide a supportive environment for homeschooling families to collaborate on educational resources, coordinate group classes, and build lasting friendships.</p>
+                    
+                    <div class="social-icons" style="display: flex; gap: 1rem;">
+                        <a href="#" aria-label="Instagram" style="color: var(--text-muted); transition: color 0.3s ease, transform 0.3s ease; display: inline-flex;" onmouseover="this.style.color='#E1306C'; this.style.transform='scale(1.1)';" onmouseout="this.style.color='var(--text-muted)'; this.style.transform='scale(1)';">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                        </a>
+                        <a href="#" aria-label="Facebook" style="color: var(--text-muted); transition: color 0.3s ease, transform 0.3s ease; display: inline-flex;" onmouseover="this.style.color='#1877F2'; this.style.transform='scale(1.1)';" onmouseout="this.style.color='var(--text-muted)'; this.style.transform='scale(1)';">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                        </a>
+                        <a href="#" aria-label="X (Twitter)" style="color: var(--text-muted); transition: color 0.3s ease, transform 0.3s ease; display: inline-flex;" onmouseover="this.style.color='#000000'; this.style.transform='scale(1.1)';" onmouseout="this.style.color='var(--text-muted)'; this.style.transform='scale(1)';">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l11.733 16h4.267l-11.733 -16z"></path><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path></svg>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="footer-col-title">Explore</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="classes.html">Classes</a></li>
+                        <li><a href="community.html">Community</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-col-title">Learning</h4>
+                    <ul class="footer-links">
+                        <li><a href="resources.html">Resources</a></li>
+                        <li><a href="membership.html">Membership</a></li>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-col-title">Keep Learning Together</h4>
+                    <p class="text-xs mb-4">Receive new class announcements and community updates.</p>
+                    <form id="newsletter-form" style="display: flex; flex-direction: column; gap: 0.75rem; width: 100%; max-width: 250px;">
+                        <input type="email" placeholder="Email Address" required style="width: 100%; height: 45px; padding: 0 1.25rem; border: 1px solid var(--border); border-radius: 50px; background: transparent; color: var(--text-primary); outline: none; font-family: var(--font-body); font-size: 0.875rem;">
+                        <button type="submit" style="width: 100%; height: 45px; padding: 0 1.25rem; border: 1px solid var(--accent-primary); border-radius: 50px; background: transparent; color: var(--accent-primary); font-weight: 500; cursor: pointer; transition: all 0.3s ease; font-family: var(--font-body); font-size: 0.875rem;" onmouseover="this.style.background='var(--accent-primary)'; this.style.color='#fff';" onmouseout="this.style.background='transparent'; this.style.color='var(--accent-primary)';">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                &copy; 2026 Homeschool Co-Op & Resource Center. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/interactions.js"></script>
+    <script>
+        // Simple JS Filtering
+        document.addEventListener('DOMContentLoaded', () => {
+            const selects = document.querySelectorAll('.filter-select');
+            const cards = document.querySelectorAll('.class-card');
+
+            const filterClasses = () => {
+                const age = document.getElementById('filter-age').value;
+                const subject = document.getElementById('filter-subject').value;
+                const day = document.getElementById('filter-day').value;
+
+                cards.forEach(card => {
+                    const matchAge = age === 'all' || card.getAttribute('data-age') === age;
+                    const matchSub = subject === 'all' || card.getAttribute('data-subject') === subject;
+                    const matchDay = day === 'all' || card.getAttribute('data-day') === day;
+
+                    if (matchAge && matchSub && matchDay) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            };
+
+            selects.forEach(select => select.addEventListener('change', filterClasses));
+        });
+    </script>
+</body>
+</html>

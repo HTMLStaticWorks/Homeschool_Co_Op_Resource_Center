@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resources | Homeschool Co-Op</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+
+        
+        .resource-nav {
+            display: flex; gap: 1rem; overflow-x: auto; padding-bottom: 1rem;
+            margin-bottom: 2rem;
+            scrollbar-width: none;
+            justify-content: center;
+        }
+        .resource-nav-btn {
+            padding: 0.5rem 1.5rem;
+            border-radius: var(--radius-pill);
+            border: 1px solid var(--border);
+            background: var(--bg-surface);
+            color: var(--text-primary);
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .resource-nav-btn.active, .resource-nav-btn:hover {
+            background: var(--accent-primary);
+            color: #fff;
+            border-color: var(--accent-primary);
+        }
+
+        .resource-card {
+            background: var(--bg-surface);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            border: 1px solid var(--border-light);
+            display: flex; flex-direction: column;
+            transition: var(--transition);
+        }
+        .resource-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+        .resource-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
+        
+        .spotlight-section {
+            background: var(--accent-primary);
+            color: #fff;
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+        }
+        [data-theme="dark"] .spotlight-section { background: var(--bg-secondary); }
+        
+        /* Dashboard-style Saved Resources */
+        .saved-dashboard {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+        }
+        .saved-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+        .saved-item:last-child { border-bottom: none; }
+    </style>
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="brand">
+                <img src="assets/images/logo.svg" alt="Homeschool Co-Op Logo" class="brand-logo">
+                <div class="brand-text-wrapper">
+                    <span class="brand-title">Homeschool Co-Op</span>
+                    <span class="brand-subtitle">Resource Center</span>
+                </div>
+            </a>
+            <div class="nav-links">
+                <div class="nav-item-dropdown">
+                    <span class="nav-link " style="display:flex; align-items:center; gap:0.25rem;">Home <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
+                    <div class="nav-dropdown-menu">
+                        <a href="index.html" class="dropdown-link ">Home 1</a>
+                        <a href="home-2.html" class="dropdown-link ">Home 2</a>
+                    </div>
+                </div>
+                <a href="about.html" class="nav-link ">About</a>
+                <a href="classes.html" class="nav-link ">Classes</a>
+                <a href="membership.html" class="nav-link ">Membership</a>
+                <a href="resources.html" class="nav-link active">Resources</a>
+                <a href="community.html" class="nav-link ">Community</a>
+                <a href="contact.html" class="nav-link ">Contact</a>
+                <a href="dashboard.html" class="nav-link ">Dashboard</a>
+            </div>
+            <div class="nav-actions">
+                <button class="btn-icon" id="theme-toggle" aria-label="Toggle Theme">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                </button>
+                <button class="btn-icon" id="rtl-toggle" aria-label="Toggle RTL">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                </button>
+                <a href="login.html" class="btn btn-secondary">Login</a>
+            </div>
+            <button class="hamburger" id="hamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- MOBILE DRAWER -->
+    <div class="mobile-drawer" id="mobile-drawer">
+        <div class="mobile-nav-links">
+            <div class="mobile-nav-item-dropdown" style="display: flex; flex-direction: column; align-items: center;">
+                <button class="mobile-nav-link active" id="mobile-home-dropdown-btn" style="display:flex; justify-content:center; align-items:center; gap: 0.5rem; background:none; border:none; cursor:pointer; padding: 0;">
+                    <span>Home</span>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dropdown-arrow" style="transition: transform 0.3s;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </button>
+                <div class="mobile-nav-dropdown-menu" id="mobile-home-dropdown-menu" style="display: none; flex-direction: column; align-items: center; gap: 1rem; margin-top: 1rem;">
+                    <a href="index.html" class="mobile-nav-link active" style="font-size: 1.5rem; color: var(--text-secondary);">Home 1</a>
+                    <a href="home-2.html" class="mobile-nav-link " style="font-size: 1.5rem; color: var(--text-secondary);">Home 2</a>
+                </div>
+            </div>
+            <a href="about.html" class="mobile-nav-link ">About</a>
+            <a href="classes.html" class="mobile-nav-link ">Classes</a>
+            <a href="membership.html" class="mobile-nav-link ">Membership</a>
+            <a href="resources.html" class="mobile-nav-link ">Resources</a>
+            <a href="community.html" class="mobile-nav-link ">Community</a>
+            <a href="contact.html" class="mobile-nav-link ">Contact</a>
+            <a href="dashboard.html" class="mobile-nav-link ">Dashboard</a>
+        </div>
+        <div class="mobile-nav-actions" style="display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 250px;">
+            <div class="flex gap-6 justify-center" style="margin-bottom: 1rem;">
+                <button class="btn-icon" id="mobile-theme-toggle" aria-label="Toggle Theme">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                </button>
+                <button class="btn-icon" id="mobile-rtl-toggle" aria-label="Toggle RTL">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10h14" /><path d="M15 6l4 4-4 4" /><path d="M19 14H5" /><path d="M9 10l-4 4 4 4" /></svg>
+                </button>
+            </div>
+            <a href="login.html" class="btn btn-primary" style="width: 100%; justify-content: center;">Parent Login</a>
+        </div>
+    </div>
+
+    <main>
+
+
+    <main>
+        <section class="page-hero">
+            <div class="container reveal">
+                <span class="eyebrow">Resources</span>
+                <h1>A Library Built for Curious Families</h1>
+                <p>Explore shared curriculum materials, reading lists, project guides, activity ideas and family learning resources.</p>
+            </div>
+        </section>
+
+        <!-- CATEGORIES & FEATURED -->
+        <section class="section-py">
+            <div class="container reveal">
+                <div class="resource-nav">
+                    <button class="resource-nav-btn active" data-filter="all">All Resources</button>
+                    <button class="resource-nav-btn" data-filter="guide">Curriculum Guides</button>
+                    <button class="resource-nav-btn" data-filter="reading">Reading Lists</button>
+                    <button class="resource-nav-btn" data-filter="science">Science Projects</button>
+                    <button class="resource-nav-btn" data-filter="art">Art Activities</button>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    
+                    <!-- GUIDES (3 Cards) -->
+                    <div class="resource-card" data-cat="guide">
+                        <div class="resource-header">
+                            <span class="tag">Guide</span>
+                            <button class="btn-icon" style="width:32px; height:32px;" title="Save"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg></button>
+                        </div>
+                        <h4 class="mb-2">Science Exploration Guide</h4>
+                        <p class="text-sm flex-1">A 4-week parent guide for setting up home biology experiments.</p>
+                        <div class="flex justify-between items-center mt-4 pt-4" style="border-top: 1px solid var(--border-light);">
+                            <span class="text-xs">Ages 8-12</span>
+                            <button class="btn btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;">View</button>
+                        </div>
+                    </div>
+                    <div class="resource-card" data-cat="guide">
+                        <div class="resource-header">
+                            <span class="tag">Guide</span>
+                            <button class="btn-icon" style="width:32px; height:32px;" title="Save"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg></button>
+                        </div>
+                        <h4 class="mb-2">World History Curriculum</h4>
+                        <p class="text-sm flex-1">Complete semester guide for exploring ancient civilizations.</p>
+                        <div class="flex justify-between items-center mt-4 pt-4" style="border-top: 1px solid var(--border-light);">
+                            <span class="text-xs">Ages 10-14</span>
+                            <button class="btn btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;">View</button>
+                        </div>
+                    </div>
+                    <div class="resource-card" data-cat="guide">
+                        <div class="resource-header">
+                            <span class="tag">Guide</span>
+                            <button class="btn-icon" style="width:32px; height:32px;" title="Save"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg></button>
+                        </div>
+                        <h4 class="mb-2">Early Math Foundations</h4>
+                        <p class="text-sm flex-1">Step-by-step parent manual for teaching basic arithmetic.</p>
+                        <div class="flex justify-between items-center mt-4 pt-4" style="border-top: 1px solid var(--border-light);">
+                            <span class="text-xs">Ages 5-8</span>
+                            <button class="btn btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;">View</button>
+                        </div>
+                    </div>
+
+                    <!-- READING LISTS (3 Cards) -->
+                    <div class="resource-card" data-cat="reading">
+                        <div class="resource-header">
+                            <span class="tag">Reading</span>
+                            <button class="btn-icon" style="width:32px; height:32px;" title="Save"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg></button>
+                        </div>
+                        <h4 class="mb-2">Family Reading List: History</h4>
+                        <p class="text-sm flex-1">Curated historical fiction and non-fiction for middle grades.</p>
+                        <div class="flex justify-between items-center mt-4 pt-4" style="border-top: 1px solid var(--border-light);">
+                            <span class="text-xs">Ages 10-14</span>
+                            <button class="btn btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;">View</button>
+                        </div>
+                    </div>
+                    <div class="resource-card" data-cat="reading">
+                        <div class="resource-header">
+                            <span class="tag">Reading</span>
+                            <button class="btn-icon" style="width:32px; height:32px;" title="Save"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg></button>
+                        </div>
+                        <h4 class="mb-2">Classic Literature Collection</h4>
+                        <p class="text-sm flex-1">Timeless novels and deep discussion guides for high schoolers.</p>
+                        <div class="flex justify-between items-center mt-4 pt-4" style="border-top: 1px solid var(--border-light);">
+                            <span class="text-xs">Ages 14-18</span>
+                            <button class="btn btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;">View</button>
+                        </div>
+                    </div>
+                    <div class="resource-card" data-cat="reading">
+                        <div class="resource-header">
+                            <span class="tag">Reading</span>
+                            <button class="btn-icon" style="width:32px; height:32px;" title="Save"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg></button>
+                        </div>
+                        <h4 class="mb-2">Picture Books for STEM</h4>
+                        <p class="text-sm flex-1">Engaging read-alouds focusing on engineering and nature.</p>
+                        <div class="flex justify-between items-center mt-4 pt-4" style="border-top: 1px solid var(--border-light);">
+                            <span class="text-xs">Ages 5-8</span>
+                            <button class="btn btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;">View</button>
+                        </div>
+                    </div>
+
+                    <!-- SCIENCE PROJECTS (3 Cards) -->
+                    <div class="resource-card" data-cat="science">
+                        <div class="resource-header">
+                            <span class="tag">Science</span>
+                            <button class="btn-icon" style="width:32px; height:32px;" title="Save"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg></button>
+                        </div>
+                        <h4 class="mb-2">Backyard Ecosystems</h4>
+                        <p class="text-sm flex-1">Hands-on project for mapping local flora and fauna.</p>
+                        <div class="flex justify-between items-center mt-4 pt-4" style="border-top: 1px solid var(--border-light);">
+                            <span class="text-xs">All Ages</span>
+                            <button class="btn btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;">View</button>
+                        </div>
+                    </div>
+                    <div class="resource-card" data-cat="science">
+                        <div class="resource-header">
+                            <span class="tag">Science</span>
+                            <button class="btn-icon" style="width:32px; height:32px;" title="Save"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg></button>
+                        </div>
+                        <h4 class="mb-2">Kitchen Chemistry</h4>
+                        <p class="text-sm flex-1">Safe and fun chemical reactions using household items.</p>
+                        <div class="flex justify-between items-center mt-4 pt-4" style="border-top: 1px solid var(--border-light);">
+                            <span class="text-xs">Ages 8-12</span>
+                            <button class="btn btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;">View</button>
+                        </div>
+                    </div>
+                    <div class="resource-card" data-cat="science">
+                        <div class="resource-header">
+                            <span class="tag">Science</span>
+                            <button class="btn-icon" style="width:32px; height:32px;" title="Save"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg></button>
+                        </div>
+                        <h4 class="mb-2">Physics of Flight</h4>
+                        <p class="text-sm flex-1">Build and test paper airplanes and simple bottle rockets.</p>
+                        <div class="flex justify-between items-center mt-4 pt-4" style="border-top: 1px solid var(--border-light);">
+                            <span class="text-xs">Ages 10-14</span>
+                            <button class="btn btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;">View</button>
+                        </div>
+                    </div>
+
+                    <!-- ART ACTIVITIES (3 Cards) -->
+                    <div class="resource-card" data-cat="art">
+                        <div class="resource-header">
+                            <span class="tag">Art</span>
+                            <button class="btn-icon" style="width:32px; height:32px;" title="Save"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg></button>
+                        </div>
+                        <h4 class="mb-2">Nature Study Journal</h4>
+                        <p class="text-sm flex-1">Printable watercolor and sketch templates for outdoor learning.</p>
+                        <div class="flex justify-between items-center mt-4 pt-4" style="border-top: 1px solid var(--border-light);">
+                            <span class="text-xs">All Ages</span>
+                            <button class="btn btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;">View</button>
+                        </div>
+                    </div>
+                    <div class="resource-card" data-cat="art">
+                        <div class="resource-header">
+                            <span class="tag">Art</span>
+                            <button class="btn-icon" style="width:32px; height:32px;" title="Save"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg></button>
+                        </div>
+                        <h4 class="mb-2">Clay Sculpting Basics</h4>
+                        <p class="text-sm flex-1">Techniques for working with air-dry clay and basic tools.</p>
+                        <div class="flex justify-between items-center mt-4 pt-4" style="border-top: 1px solid var(--border-light);">
+                            <span class="text-xs">Ages 8-12</span>
+                            <button class="btn btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;">View</button>
+                        </div>
+                    </div>
+                    <div class="resource-card" data-cat="art">
+                        <div class="resource-header">
+                            <span class="tag">Art</span>
+                            <button class="btn-icon" style="width:32px; height:32px;" title="Save"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg></button>
+                        </div>
+                        <h4 class="mb-2">Recycled Masterpieces</h4>
+                        <p class="text-sm flex-1">Create beautiful crafts using everyday recycled materials.</p>
+                        <div class="flex justify-between items-center mt-4 pt-4" style="border-top: 1px solid var(--border-light);">
+                            <span class="text-xs">Ages 5-8</span>
+                            <button class="btn btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;">View</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- SPOTLIGHT -->
+        <section class="section-py">
+            <div class="container reveal">
+                <div class="spotlight-section grid md:grid-cols-2 items-center">
+                    <img src="assets/images/World History Starter Pack.png" alt="Spotlight" style="height: 100%; object-fit: cover;">
+                    <div style="padding: 3rem;">
+                        <span class="eyebrow" style="color: var(--accent-tertiary);">Resource Spotlight</span>
+                        <h2 style="color: #fff;">World History Starter Pack</h2>
+                        <ul style="list-style: none; margin: 1.5rem 0;">
+                            <li class="mb-2 opacity-80">Ages: 10-14</li>
+                            <li class="mb-2 opacity-80">Subject: History & Culture</li>
+                            <li class="mb-2 opacity-80">Est. Time: 4 Weeks</li>
+                        </ul>
+                        <button class="btn btn-secondary" style="border-color: #fff; color: #fff;">View Full Resource</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SAVED RESOURCES (DASHBOARD STYLE) -->
+        <section class="section-py">
+            <div class="container reveal">
+                <h2 class="mb-8">Your Saved Resources</h2>
+                <div class="saved-dashboard">
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="mb-4">Saved (3)</h4>
+                            <div class="saved-item">
+                                <div><div class="font-bold">Science Exploration Guide</div><div class="text-xs text-muted">Added 2 days ago</div></div>
+                                <button class="btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; border-radius: 4px;">Download</button>
+                            </div>
+                            <div class="saved-item">
+                                <div><div class="font-bold">Nature Study Journal</div><div class="text-xs text-muted">Added 1 week ago</div></div>
+                                <button class="btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; border-radius: 4px;">Download</button>
+                            </div>
+                            <div class="saved-item">
+                                <div><div class="font-bold">Creative Writing Toolkit</div><div class="text-xs text-muted">Added 2 weeks ago</div></div>
+                                <button class="btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; border-radius: 4px;">Download</button>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="mb-4">Recommended For You</h4>
+                            <div class="saved-item">
+                                <div><div class="font-bold">Hands-On Math Activities</div><div class="text-xs text-muted">Ages 5-8</div></div>
+                                <button class="btn-primary" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; border-radius: 4px; border:none;">View</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <a href="index.html" class="brand mb-6" style="display: inline-flex;">
+                        <img src="assets/images/logo.svg" alt="Logo" width="40" height="40">
+                        <span class="brand-title" style="font-size: 1.1rem;">Homeschool Co-Op</span>
+                    </a>
+                    <p class="text-sm" style="line-height: 1.6; margin-bottom: 1.5rem;">A community where families learn, share, and grow together. We provide a supportive environment for homeschooling families to collaborate on educational resources, coordinate group classes, and build lasting friendships.</p>
+                    
+                    <div class="social-icons" style="display: flex; gap: 1rem;">
+                        <a href="#" aria-label="Instagram" style="color: var(--text-muted); transition: color 0.3s ease, transform 0.3s ease; display: inline-flex;" onmouseover="this.style.color='#E1306C'; this.style.transform='scale(1.1)';" onmouseout="this.style.color='var(--text-muted)'; this.style.transform='scale(1)';">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                        </a>
+                        <a href="#" aria-label="Facebook" style="color: var(--text-muted); transition: color 0.3s ease, transform 0.3s ease; display: inline-flex;" onmouseover="this.style.color='#1877F2'; this.style.transform='scale(1.1)';" onmouseout="this.style.color='var(--text-muted)'; this.style.transform='scale(1)';">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                        </a>
+                        <a href="#" aria-label="X (Twitter)" style="color: var(--text-muted); transition: color 0.3s ease, transform 0.3s ease; display: inline-flex;" onmouseover="this.style.color='#000000'; this.style.transform='scale(1.1)';" onmouseout="this.style.color='var(--text-muted)'; this.style.transform='scale(1)';">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l11.733 16h4.267l-11.733 -16z"></path><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path></svg>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="footer-col-title">Explore</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="classes.html">Classes</a></li>
+                        <li><a href="community.html">Community</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-col-title">Learning</h4>
+                    <ul class="footer-links">
+                        <li><a href="resources.html">Resources</a></li>
+                        <li><a href="membership.html">Membership</a></li>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-col-title">Keep Learning Together</h4>
+                    <p class="text-xs mb-4">Receive new class announcements and community updates.</p>
+                    <form id="newsletter-form" style="display: flex; flex-direction: column; gap: 0.75rem; width: 100%; max-width: 250px;">
+                        <input type="email" placeholder="Email Address" required style="width: 100%; height: 45px; padding: 0 1.25rem; border: 1px solid var(--border); border-radius: 50px; background: transparent; color: var(--text-primary); outline: none; font-family: var(--font-body); font-size: 0.875rem;">
+                        <button type="submit" style="width: 100%; height: 45px; padding: 0 1.25rem; border: 1px solid var(--accent-primary); border-radius: 50px; background: transparent; color: var(--accent-primary); font-weight: 500; cursor: pointer; transition: all 0.3s ease; font-family: var(--font-body); font-size: 0.875rem;" onmouseover="this.style.background='var(--accent-primary)'; this.style.color='#fff';" onmouseout="this.style.background='transparent'; this.style.color='var(--accent-primary)';">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                &copy; 2026 Homeschool Co-Op & Resource Center. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/interactions.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btns = document.querySelectorAll('.resource-nav-btn');
+            const cards = document.querySelectorAll('.resource-card');
+
+            btns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    btns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    const filter = btn.getAttribute('data-filter');
+                    cards.forEach(card => {
+                        if (filter === 'all' || card.getAttribute('data-cat') === filter) {
+                            card.style.display = 'flex';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

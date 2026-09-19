@@ -1,0 +1,35 @@
+<!-- MOBILE DRAWER -->
+    <div class="mobile-drawer" id="mobile-drawer">
+        <div class="mobile-nav-links">
+            <div class="mobile-nav-item-dropdown" style="display: flex; flex-direction: column; align-items: center;">
+                <button class="mobile-nav-link active" id="mobile-home-dropdown-btn" style="display:flex; justify-content:center; align-items:center; gap: 0.5rem; background:none; border:none; cursor:pointer; padding: 0;">
+                    <span>Home</span>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dropdown-arrow" style="transition: transform 0.3s;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </button>
+                <div class="mobile-nav-dropdown-menu" id="mobile-home-dropdown-menu" style="display: none; flex-direction: column; align-items: center; gap: 1rem; margin-top: 1rem;">
+                    <a href="index.html" class="mobile-nav-link active" style="font-size: 1.5rem; color: var(--text-secondary);">Home 1</a>
+                    <a href="home-2.html" class="mobile-nav-link " style="font-size: 1.5rem; color: var(--text-secondary);">Home 2</a>
+                </div>
+            </div>
+            <a href="about.html" class="mobile-nav-link ">About</a>
+            <a href="classes.html" class="mobile-nav-link ">Classes</a>
+            <a href="membership.html" class="mobile-nav-link ">Membership</a>
+            <a href="resources.html" class="mobile-nav-link ">Resources</a>
+            <a href="community.html" class="mobile-nav-link ">Community</a>
+            <a href="contact.html" class="mobile-nav-link ">Contact</a>
+            <a href="dashboard.html" class="mobile-nav-link ">Dashboard</a>
+        </div>
+        <div class="mobile-nav-actions" style="display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 250px;">
+            <div class="flex gap-6 justify-center" style="margin-bottom: 1rem;">
+                <button class="btn-icon" id="mobile-theme-toggle" aria-label="Toggle Theme">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                </button>
+                <button class="btn-icon" id="mobile-rtl-toggle" aria-label="Toggle RTL">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10h14" /><path d="M15 6l4 4-4 4" /><path d="M19 14H5" /><path d="M9 10l-4 4 4 4" /></svg>
+                </button>
+            </div>
+            <a href="login.html" class="btn btn-primary" style="width: 100%; justify-content: center;">Parent Login</a>
+        </div>
+    </div>
+
+    <main>

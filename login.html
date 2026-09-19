@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Homeschool Co-Op</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        body {
+            background: var(--bg-secondary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            position: relative;
+        }
+        
+        .top-controls {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 1rem;
+            z-index: 10;
+        }
+        [dir="rtl"] .top-controls {
+            right: auto;
+            left: 2rem;
+        }
+        .icon-btn {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-primary);
+            transition: var(--transition);
+        }
+        .icon-btn:hover {
+            background: var(--bg-secondary);
+        }
+
+        .auth-card {
+            background: var(--bg-primary);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            width: 100%;
+            max-width: 480px;
+            padding: 2.5rem;
+            margin: 2rem;
+            border: 1px solid var(--border-light);
+        }
+
+        @media (max-width: 768px) {
+            .auth-card {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+        }
+
+        .site-name-link {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-primary);
+            margin-bottom: 2rem;
+            gap: 0.75rem;
+        }
+        .site-name-link h2 {
+            font-size: 1.5rem;
+            margin: 0;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 768px) {
+            .site-name-link h2 {
+                font-size: 1.25rem;
+            }
+        }
+
+        .auth-tabs {
+            display: flex;
+            border-bottom: 2px solid var(--border-light);
+            margin-bottom: 2rem;
+        }
+        .auth-tab {
+            flex: 1;
+            text-align: center;
+            padding: 1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            position: relative;
+        }
+        .auth-tab.active { color: var(--accent-primary); }
+        .auth-tab::after {
+            content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 2px;
+            background: var(--accent-primary);
+            transform: scaleX(0); transition: var(--transition);
+        }
+        .auth-tab.active::after { transform: scaleX(1); }
+
+        .auth-form { display: none; animation: fadeIn 0.4s ease; }
+        .auth-form.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .social-login {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            margin-top: 1.5rem;
+        }
+        .btn-social {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            width: 100%;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            color: var(--text-primary);
+            font-weight: 500;
+            padding: 0.75rem;
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        .btn-social:hover {
+            background: var(--bg-secondary);
+        }
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 1.5rem 0;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid var(--border-light);
+        }
+        .divider:not(:empty)::before { margin-right: 1em; }
+        .divider:not(:empty)::after { margin-left: 1em; }
+    </style>
+</head>
+<body>
+
+
+    <div class="top-controls">
+        <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        </button>
+        <button id="rtl-toggle" class="icon-btn" aria-label="Toggle RTL">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 10h14" />
+                <path d="M15 6l4 4-4 4" />
+                <path d="M19 14H5" />
+                <path d="M9 10l-4 4 4 4" />
+            </svg>
+        </button>
+    </div>
+
+    <div class="auth-card">
+        <a href="index.html" class="site-name-link">
+            <img src="assets/images/logo.svg" alt="Logo" width="48">
+            <h2>Homeschool Co-Op</h2>
+        </a>
+        
+        <div class="auth-tabs">
+            <div class="auth-tab active" data-tab="login">LOGIN</div>
+            <div class="auth-tab" data-tab="register">REGISTER</div>
+        </div>
+
+        <!-- LOGIN FORM -->
+                <form id="login-form" class="auth-form active" action="dashboard.html">
+                    <h3 class="mb-6">Welcome Back</h3>
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-control" required value="parent@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="password" class="form-control" required value="password123">
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; font-size: 0.875rem; flex-wrap: nowrap; gap: 0.5rem;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; white-space: nowrap;">
+                            <input type="checkbox"> Remember Me
+                        </label>
+                        <a href="#" style="color: var(--accent-secondary); text-decoration: none; white-space: nowrap;">Forgot Password?</a>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-full" style="width: 100%;">Parent Login</button>
+                    
+                    <div class="divider">or continue with</div>
+                    <div class="social-login">
+                        <button type="button" class="btn-social">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                            </svg>
+                            Continue with Google
+                        </button>
+                        <button type="button" class="btn-social">
+                            <svg width="20" height="20" viewBox="0 0 384 512" fill="currentColor">
+                                <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/>
+                            </svg>
+                            Continue with Apple
+                        </button>
+                    </div>
+                </form>
+
+                <!-- REGISTER FORM -->
+                <form id="register-form" class="auth-form" action="dashboard.html">
+                    <h3 class="mb-6">Create Family Account</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="form-group">
+                            <label class="form-label">Parent / Guardian Name</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Phone</label>
+                            <input type="tel" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-control" required>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="form-group">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" required id="reg-pwd">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" required id="reg-pwd-conf">
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="form-group">
+                            <label class="form-label">Number of Children</label>
+                            <input type="number" class="form-control" min="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Children's Age Range</label>
+                            <input type="text" class="form-control" placeholder="e.g. 5-10" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Learning Interests</label>
+                        <input type="text" class="form-control" placeholder="e.g. STEM, Arts">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Membership Interest</label>
+                        <select class="form-control">
+                            <option>Community</option><option>Explorer</option><option>Collaborator</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-full" style="width: 100%; margin-top: 1rem;">Create Family Account</button>
+                    
+                    <div class="divider">or continue with</div>
+                    <div class="social-login">
+                        <button type="button" class="btn-social">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                            </svg>
+                            Continue with Google
+                        </button>
+                        <button type="button" class="btn-social">
+                            <svg width="20" height="20" viewBox="0 0 384 512" fill="currentColor">
+                                <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/>
+                            </svg>
+                            Continue with Apple
+                        </button>
+                    </div>
+                </form>
+    </div>
+
+    <script src="assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabs = document.querySelectorAll('.auth-tab');
+            const forms = document.querySelectorAll('.auth-form');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remove active from all tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    // Add active to clicked tab
+                    tab.classList.add('active');
+                    
+                    // Hide all forms
+                    forms.forEach(f => f.classList.remove('active'));
+                    // Show target form
+                    const targetId = tab.getAttribute('data-tab') + '-form';
+                    document.getElementById(targetId).classList.add('active');
+                });
+            });
+
+            // Password confirmation validation
+            const regForm = document.getElementById('register-form');
+            if(regForm) {
+                regForm.addEventListener('submit', (e) => {
+                    const pwd = document.getElementById('reg-pwd').value;
+                    const pwdConf = document.getElementById('reg-pwd-conf').value;
+                    if (pwd !== pwdConf) {
+                        e.preventDefault();
+                        alert("Passwords do not match.");
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

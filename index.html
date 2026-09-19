@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homeschool Co-Op & Resource Center</title>
+    <meta name="description" content="A welcoming homeschool community where families connect, collaborate, discover new classes, and build meaningful learning experiences together.">
+    
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="assets/css/style.css">
+    
+    <style>
+        /* Home Specific Styles */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 5rem;
+            overflow: hidden;
+        }
+        .hero-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(249, 246, 240, 0.9) 0%, rgba(240, 234, 225, 0.7) 100%),
+                        url('https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&q=80&w=2000') center/cover;
+            z-index: -1;
+        }
+        [data-theme="dark"] .hero-bg {
+            background: linear-gradient(135deg, rgba(18, 24, 22, 0.9) 0%, rgba(26, 36, 33, 0.8) 100%),
+                        url('https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&q=80&w=2000') center/cover;
+        }
+        .hero-content {
+            max-width: 800px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .floating-book {
+            position: absolute;
+            right: 10%;
+            top: 40%;
+            width: 250px;
+            height: auto;
+            opacity: 0.8;
+            filter: drop-shadow(var(--shadow-xl));
+            z-index: 1;
+        }
+
+        /* How it works */
+        .pathway-grid {
+            position: relative;
+        }
+        .pathway-line {
+            position: absolute;
+            top: 20%; left: 10%; width: 80%; height: 60%;
+            border: 2px dashed var(--accent-secondary);
+            border-radius: var(--radius-pill);
+            z-index: 0;
+            opacity: 0.3;
+        }
+        .step-card {
+            position: relative;
+            z-index: 1;
+            padding: 2.5rem;
+            background: var(--bg-surface);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-light);
+        }
+        .step-card:nth-child(even) {
+            transform: translateY(3rem);
+        }
+
+        /* Categories */
+        .category-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--radius-lg);
+            aspect-ratio: 4/5;
+            display: flex;
+            align-items: flex-end;
+            padding: 2rem;
+            text-decoration: none;
+            color: #fff;
+        }
+        .category-card img {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+            z-index: 0;
+        }
+        .category-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            z-index: 1;
+        }
+        .category-card:hover img {
+            transform: scale(1.05);
+        }
+        .category-content {
+            position: relative;
+            z-index: 2;
+        }
+        [data-theme="dark"] .category-card { color: #fff; }
+
+        /* Path Selector */
+        .path-selector {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding-bottom: 1rem;
+            scrollbar-width: none;
+        }
+        @media (max-width: 767px) {
+            .path-selector {
+                flex-direction: column;
+                overflow-x: visible;
+                align-items: stretch;
+            }
+            .path-btn {
+                width: 100%;
+            }
+        }
+        .path-btn {
+            white-space: nowrap;
+            padding: 1rem 2rem;
+            border-radius: var(--radius-pill);
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .path-btn.active, .path-btn:hover {
+            background: var(--accent-primary);
+            color: #fff;
+            border-color: var(--accent-primary);
+        }
+
+        /* Dashboard Preview */
+        .dashboard-preview-section {
+            background-color: var(--accent-primary);
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+        .dashboard-mockup {
+            background: var(--bg-surface);
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+            padding: 1rem;
+            box-shadow: var(--shadow-xl);
+            margin-top: 3rem;
+            transform: perspective(1000px) rotateX(5deg);
+            transition: transform 0.5s ease;
+        }
+        .dashboard-mockup:hover {
+            transform: perspective(1000px) rotateX(0deg);
+        }
+        [data-theme="dark"] .dashboard-preview-section { background-color: var(--bg-secondary); }
+
+        .hero-content {
+            text-align: center;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .hero-content .flex {
+            justify-content: center;
+        }
+
+        @media (max-width: 1024px) {
+            .floating-book {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="brand">
+                <img src="assets/images/logo.svg" alt="Homeschool Co-Op Logo" class="brand-logo">
+                <div class="brand-text-wrapper">
+                    <span class="brand-title">Homeschool Co-Op</span>
+                    <span class="brand-subtitle">Resource Center</span>
+                </div>
+            </a>
+            <div class="nav-links">
+                <div class="nav-item-dropdown">
+                    <span class="nav-link active" style="display:flex; align-items:center; gap:0.25rem;">Home <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
+                    <div class="nav-dropdown-menu">
+                        <a href="index.html" class="dropdown-link active">Home 1</a>
+                        <a href="home-2.html" class="dropdown-link ">Home 2</a>
+                    </div>
+                </div>
+                <a href="about.html" class="nav-link ">About</a>
+                <a href="classes.html" class="nav-link ">Classes</a>
+                <a href="membership.html" class="nav-link ">Membership</a>
+                <a href="resources.html" class="nav-link ">Resources</a>
+                <a href="community.html" class="nav-link ">Community</a>
+                <a href="contact.html" class="nav-link ">Contact</a>
+                <a href="dashboard.html" class="nav-link ">Dashboard</a>
+            </div>
+            <div class="nav-actions">
+                <button class="btn-icon" id="theme-toggle" aria-label="Toggle Theme">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                </button>
+                <button class="btn-icon" id="rtl-toggle" aria-label="Toggle RTL">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                </button>
+                <a href="login.html" class="btn btn-secondary">Login</a>
+            </div>
+            <button class="hamburger" id="hamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- MOBILE DRAWER -->
+    <div class="mobile-drawer" id="mobile-drawer">
+        <div class="mobile-nav-links">
+            <div class="mobile-nav-item-dropdown" style="display: flex; flex-direction: column; align-items: center;">
+                <button class="mobile-nav-link active" id="mobile-home-dropdown-btn" style="display:flex; justify-content:center; align-items:center; gap: 0.5rem; background:none; border:none; cursor:pointer; padding: 0;">
+                    <span>Home</span>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dropdown-arrow" style="transition: transform 0.3s;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </button>
+                <div class="mobile-nav-dropdown-menu" id="mobile-home-dropdown-menu" style="display: none; flex-direction: column; align-items: center; gap: 1rem; margin-top: 1rem;">
+                    <a href="index.html" class="mobile-nav-link active" style="font-size: 1.5rem; color: var(--text-secondary);">Home 1</a>
+                    <a href="home-2.html" class="mobile-nav-link " style="font-size: 1.5rem; color: var(--text-secondary);">Home 2</a>
+                </div>
+            </div>
+            <a href="about.html" class="mobile-nav-link ">About</a>
+            <a href="classes.html" class="mobile-nav-link ">Classes</a>
+            <a href="membership.html" class="mobile-nav-link ">Membership</a>
+            <a href="resources.html" class="mobile-nav-link ">Resources</a>
+            <a href="community.html" class="mobile-nav-link ">Community</a>
+            <a href="contact.html" class="mobile-nav-link ">Contact</a>
+            <a href="dashboard.html" class="mobile-nav-link ">Dashboard</a>
+        </div>
+        <div class="mobile-nav-actions" style="display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 250px;">
+            <div class="flex gap-6 justify-center" style="margin-bottom: 1rem;">
+                <button class="btn-icon" id="mobile-theme-toggle" aria-label="Toggle Theme">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                </button>
+                <button class="btn-icon" id="mobile-rtl-toggle" aria-label="Toggle RTL">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10h14" /><path d="M15 6l4 4-4 4" /><path d="M19 14H5" /><path d="M9 10l-4 4 4 4" /></svg>
+                </button>
+            </div>
+            <a href="login.html" class="btn btn-primary" style="width: 100%; justify-content: center;">Parent Login</a>
+        </div>
+    </div>
+
+    <main>
+        <!-- SECTION 01: HERO -->
+        <section class="hero">
+            <div class="hero-bg"></div>
+            <!-- 3D floating object placeholder using CSS -->
+            
+            <div class="container">
+                <div class="hero-content reveal">
+                    <span class="eyebrow">Homeschool Community</span>
+                    <h1 class="mb-6">LEARN TOGETHER.<br>GROW TOGETHER.</h1>
+                    <p class="mb-8" style="font-size: 1.25rem; max-width: 600px;">A welcoming homeschool community where families connect, collaborate, discover new classes, and build meaningful learning experiences together.</p>
+                    <div class="flex gap-4 flex-wrap">
+                        <a href="classes.html" class="btn btn-primary">Explore Classes</a>
+                        <button class="btn btn-secondary" data-modal-target="modal-join">Join the Co-Op</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 02: HOW OUR CO-OP WORKS -->
+        <section class="section-py">
+            <div class="container">
+                <div class="text-center mb-12 reveal">
+                    <h2>A Different Way to Learn</h2>
+                    <p style="max-width: 600px; margin: 0 auto;">Our co-op model blends family-led education with community collaboration.</p>
+                </div>
+
+                <div class="pathway-grid grid md:grid-cols-2 xl:grid-cols-4 gap-8 reveal reveal-delay-1">
+                    <div class="pathway-line"></div>
+                    
+                    <div class="step-card">
+                        <span class="eyebrow">01 — Connect</span>
+                        <h3>Meet Families</h3>
+                        <p>Connect with parents who share your interest in collaborative, child-led learning.</p>
+                    </div>
+                    
+                    <div class="step-card">
+                        <span class="eyebrow">02 — Discover</span>
+                        <h3>Explore Classes</h3>
+                        <p>Discover workshops, activities, and curriculum resources tailored to your child.</p>
+                    </div>
+                    
+                    <div class="step-card">
+                        <span class="eyebrow">03 — Participate</span>
+                        <h3>Join Together</h3>
+                        <p>Participate in group classes and community experiences as a family unit.</p>
+                    </div>
+                    
+                    <div class="step-card">
+                        <span class="eyebrow">04 — Grow</span>
+                        <h3>Track Progress</h3>
+                        <p>Manage attendance, track learning paths, and build lasting community connections.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 03: CLASSES & LEARNING -->
+        <section class="section-py" style="background-color: var(--bg-secondary);">
+            <div class="container">
+                <div class="flex flex-wrap justify-between items-end mb-12 reveal">
+                    <div>
+                        <h2>Discover Learning Paths</h2>
+                        <p>Explore our diverse range of collaborative classes.</p>
+                    </div>
+                    <a href="classes.html" class="btn btn-secondary" style="padding: 10px 24px !important; height: 45px !important; width: auto !important; border-radius: 50px !important; display: inline-flex !important; align-items: center; justify-content: center; aspect-ratio: auto !important;">View All Classes</a>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 reveal reveal-delay-1">
+                    <!-- Class Category 1 -->
+                    <a href="classes.html" class="category-card">
+                        <img src="assets/images/Science & Nature.png" alt="Science" loading="lazy">
+                        <div class="category-content">
+                            <span class="tag mb-2" style="color: #fff; background: rgba(255,255,255,0.2);">Ages 8-12</span>
+                            <h3>Science & Nature</h3>
+                            <p class="text-sm m-0" style="color: #ddd;">Example: Young Explorers Lab</p>
+                        </div>
+                    </a>
+                    
+                    <!-- Class Category 2 -->
+                    <a href="classes.html" class="category-card">
+                        <img src="assets/images/Creative Arts.png" alt="Creative Arts" loading="lazy">
+                        <div class="category-content">
+                            <span class="tag mb-2" style="color: #fff; background: rgba(255,255,255,0.2);">Ages 5-15</span>
+                            <h3>Creative Arts</h3>
+                            <p class="text-sm m-0" style="color: #ddd;">Example: Art Studio Collective</p>
+                        </div>
+                    </a>
+
+                    <!-- Class Category 3 -->
+                    <a href="classes.html" class="category-card">
+                        <img src="assets/images/Literature & Writing.png" alt="Literature" loading="lazy">
+                        <div class="category-content">
+                            <span class="tag mb-2" style="color: #fff; background: rgba(255,255,255,0.2);">Ages 10-16</span>
+                            <h3>Literature & Writing</h3>
+                            <p class="text-sm m-0" style="color: #ddd;">Example: Creative Storytelling</p>
+                        </div>
+                    </a>
+
+                    <!-- Class Category 4 -->
+                    <a href="classes.html" class="category-card">
+                        <img src="assets/images/Technology.png" alt="Technology" loading="lazy">
+                        <div class="category-content">
+                            <span class="tag mb-2" style="color: #fff; background: rgba(255,255,255,0.2);">Ages 12-18</span>
+                            <h3>Technology</h3>
+                            <p class="text-sm m-0" style="color: #ddd;">Example: Junior Coding Lab</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 04: LEARN TOGETHER -->
+        <section class="section-py overflow-hidden">
+            <div class="container">
+                <div class="grid lg:grid-cols-2 gap-12 items-center reveal">
+                    <div style="position: relative;">
+                        <img src="assets/images/Learning Is Better Together.png" alt="Community Learning" style="border-radius: var(--radius-xl); box-shadow: var(--shadow-xl); width: 100%; object-fit: cover;" loading="lazy">
+                        <!-- Floating Panel -->
+                        <div class="card floating-element" style="position: absolute; bottom: -2rem; right: -2rem; width: 250px; z-index: 2;">
+                            <h4 style="color: var(--accent-primary);">150+ Families</h4>
+                            <p class="text-sm mb-0">Learning and growing together every week.</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h2>Learning Is Better Together</h2>
+                        <p>We believe that education is most effective when it is a collaborative effort between children, parents, and the broader community.</p>
+                        <ul style="list-style: none; display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem;">
+                            <li class="flex items-center gap-4">
+                                <span style="color: var(--accent-secondary); font-size: 1.5rem;">✦</span>
+                                <span>Small group classes fostering deep connection</span>
+                            </li>
+                            <li class="flex items-center gap-4">
+                                <span style="color: var(--accent-secondary); font-size: 1.5rem;">✦</span>
+                                <span>Parent-led activities and shared expertise</span>
+                            </li>
+                            <li class="flex items-center gap-4">
+                                <span style="color: var(--accent-secondary); font-size: 1.5rem;">✦</span>
+                                <span>Outdoor projects integrating nature and science</span>
+                            </li>
+                        </ul>
+                        <a href="community.html" class="btn btn-primary">Meet Our Community</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 05: FIND YOUR LEARNING PATH -->
+        <section class="section-py" style="background-color: var(--bg-primary);">
+            <div class="container text-center reveal">
+                <h2 class="mb-8">What Would You Like to Explore?</h2>
+                
+                <div class="path-selector justify-center mb-12" id="path-selector">
+                    <button class="path-btn active" data-target="stem">STEM</button>
+                    <button class="path-btn" data-target="arts">Arts</button>
+                    <button class="path-btn" data-target="reading">Reading</button>
+                    <button class="path-btn" data-target="nature">Nature</button>
+                </div>
+
+                <div class="card max-w-3xl mx-auto" id="path-content" style="max-width: 800px; margin: 0 auto; text-align: left; background-color: #ffffff; color: #1F2937; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+                    <div class="grid md:grid-cols-2 gap-8 items-center">
+                        <div>
+                            <span class="eyebrow" id="path-eyebrow" style="color: #2D5A4C;">Science & Tech</span>
+                            <h3 id="path-title" style="color: #1F2937;">STEM Exploration</h3>
+                            <p id="path-desc" style="color: #4B5563;">Hands-on experiments, coding fundamentals, and mathematical problem-solving for curious minds.</p>
+                            <div class="flex gap-4 mt-4">
+                                <span class="badge">Ages 8-15</span>
+                                <span class="badge" style="background: var(--sage);">4 Active Classes</span>
+                            </div>
+                        </div>
+                        <div>
+                            <img id="path-img" src="assets/images/Science & Tech.png" alt="STEM" style="border-radius: var(--radius-lg); height: 200px; width: 100%; object-fit: cover;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 06: FAMILY MEMBERSHIP -->
+        <section class="section-py dashboard-preview-section">
+            <div class="container">
+                <div class="grid lg:grid-cols-2 gap-12 items-center reveal">
+                    <div style="text-align: center; display: flex; flex-direction: column; align-items: center;">
+                        <h2 style="color: #fff; font-family: var(--font-heading); font-size: 2.5rem; margin-bottom: 1rem; text-align: center;">Your Family Learning Hub</h2>
+                        <p style="color: rgba(255,255,255,0.9); font-size: 1.125rem; line-height: 1.6;" class="mb-8">Manage classes, schedules, attendance, resources, family communication and membership details from one simple parent dashboard.</p>
+                        <a href="dashboard.html" class="btn btn-secondary" style="border: 2px solid #fff !important; color: #fff !important; border-radius: 50px !important; padding: 12px 28px !important; display: inline-flex !important; align-items: center; justify-content: center; width: auto !important; height: auto !important; font-weight: 600; background: transparent !important; transition: all 0.3s ease;">Access Parent Dashboard</a>
+                    </div>
+                    
+                    <div style="position: relative; z-index: 10; transform: perspective(1000px) rotateY(-5deg) rotateX(2deg); transition: transform 0.4s ease; cursor: pointer;" onmouseover="this.style.transform='perspective(1000px) rotateY(0deg) rotateX(0deg) translateY(-10px)'" onmouseout="this.style.transform='perspective(1000px) rotateY(-5deg) rotateX(2deg)'">
+                        <!-- Premium Dashboard Mockup UI -->
+                        <div style="background: #FFFFFF; border-radius: 12px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3); overflow: hidden; border: 1px solid rgba(255,255,255,0.2);">
+                            
+                            <!-- Header (Mac Style) -->
+                            <div style="background: #F8FAFC; border-bottom: 1px solid #E2E8F0; padding: 0.75rem 1.25rem; display: flex; align-items: center; justify-content: space-between;">
+                                <div class="flex items-center gap-2">
+                                    <div style="width: 12px; height: 12px; border-radius: 50%; background: #EF4444;"></div>
+                                    <div style="width: 12px; height: 12px; border-radius: 50%; background: #F59E0B;"></div>
+                                    <div style="width: 12px; height: 12px; border-radius: 50%; background: #10B981;"></div>
+                                </div>
+                                <div style="font-size: 0.75rem; font-weight: 600; color: #94A3B8; font-family: var(--font-body);">hub.homeschoolcoop.com</div>
+                                <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--accent-secondary); border: 2px solid #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"></div>
+                            </div>
+                            
+                            <!-- App Body -->
+                            <div style="display: flex; height: 280px; font-family: var(--font-body);">
+                                <!-- Sidebar -->
+                                <div style="width: 25%; background: #F1F5F9; border-right: 1px solid #E2E8F0; padding: 1.5rem 1rem; display: flex; flex-direction: column; gap: 1rem;">
+                                    <div style="height: 8px; width: 70%; background: #94A3B8; border-radius: 4px; margin-bottom: 1rem;"></div>
+                                    <div style="height: 8px; width: 90%; background: #CBD5E1; border-radius: 4px;"></div>
+                                    <div style="height: 8px; width: 60%; background: #CBD5E1; border-radius: 4px;"></div>
+                                    <div style="height: 8px; width: 80%; background: #CBD5E1; border-radius: 4px;"></div>
+                                    <div style="height: 8px; width: 75%; background: #CBD5E1; border-radius: 4px; margin-top: auto;"></div>
+                                </div>
+                                
+                                <!-- Main Content -->
+                                <div style="flex: 1; padding: 1.5rem; background: #FFFFFF; display: flex; flex-direction: column; gap: 1rem;">
+                                    <h4 style="margin: 0; font-size: 1.125rem; color: #0F172A; font-weight: 700;">Welcome back, Family</h4>
+                                    
+                                    <div style="display: flex; gap: 1rem;">
+                                        <!-- Card 1 -->
+                                        <div style="flex: 1; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 1rem;">
+                                            <div style="font-size: 0.75rem; color: #64748B; margin-bottom: 0.25rem;">Upcoming Class</div>
+                                            <div style="font-size: 1.125rem; font-weight: 700; color: #0F172A;">Science Lab</div>
+                                            <div style="font-size: 0.75rem; color: var(--accent-primary); margin-top: 0.25rem; font-weight: 600;">Today, 10:00 AM</div>
+                                        </div>
+                                        <!-- Card 2 -->
+                                        <div style="flex: 1; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 1rem;">
+                                            <div style="font-size: 0.75rem; color: #64748B; margin-bottom: 0.25rem;">Term Attendance</div>
+                                            <div style="font-size: 1.125rem; font-weight: 700; color: #0F172A;">96%</div>
+                                            <div style="font-size: 0.75rem; color: #10B981; margin-top: 0.25rem; font-weight: 600;">+2% this month</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- List -->
+                                    <div style="flex: 1; background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 8px; padding: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+                                         <div style="font-size: 0.875rem; font-weight: 600; color: #0F172A;">Recent Announcements</div>
+                                         <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                             <div style="width: 32px; height: 32px; border-radius: 6px; background: #E2E8F0;"></div>
+                                             <div style="flex: 1;">
+                                                 <div style="height: 6px; width: 100%; background: #E2E8F0; border-radius: 3px; margin-bottom: 0.5rem;"></div>
+                                                 <div style="height: 6px; width: 70%; background: #F1F5F9; border-radius: 3px;"></div>
+                                             </div>
+                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <a href="index.html" class="brand mb-6" style="display: inline-flex;">
+                        <img src="assets/images/logo.svg" alt="Logo" width="40" height="40">
+                        <span class="brand-title" style="font-size: 1.1rem;">Homeschool Co-Op</span>
+                    </a>
+                    <p class="text-sm" style="line-height: 1.6; margin-bottom: 1.5rem;">A community where families learn, share, and grow together. We provide a supportive environment for homeschooling families to collaborate on educational resources, coordinate group classes, and build lasting friendships.</p>
+                    
+                    <div class="social-icons" style="display: flex; gap: 1rem;">
+                        <a href="#" aria-label="Instagram" style="color: var(--text-muted); transition: color 0.3s ease, transform 0.3s ease; display: inline-flex;" onmouseover="this.style.color='#E1306C'; this.style.transform='scale(1.1)';" onmouseout="this.style.color='var(--text-muted)'; this.style.transform='scale(1)';">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                        </a>
+                        <a href="#" aria-label="Facebook" style="color: var(--text-muted); transition: color 0.3s ease, transform 0.3s ease; display: inline-flex;" onmouseover="this.style.color='#1877F2'; this.style.transform='scale(1.1)';" onmouseout="this.style.color='var(--text-muted)'; this.style.transform='scale(1)';">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                        </a>
+                        <a href="#" aria-label="X (Twitter)" style="color: var(--text-muted); transition: color 0.3s ease, transform 0.3s ease; display: inline-flex;" onmouseover="this.style.color='#000000'; this.style.transform='scale(1.1)';" onmouseout="this.style.color='var(--text-muted)'; this.style.transform='scale(1)';">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l11.733 16h4.267l-11.733 -16z"></path><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path></svg>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="footer-col-title">Explore</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="classes.html">Classes</a></li>
+                        <li><a href="community.html">Community</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-col-title">Learning</h4>
+                    <ul class="footer-links">
+                        <li><a href="resources.html">Resources</a></li>
+                        <li><a href="membership.html">Membership</a></li>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-col-title">Keep Learning Together</h4>
+                    <p class="text-xs mb-4">Receive new class announcements and community updates.</p>
+                    <form id="newsletter-form" style="display: flex; flex-direction: column; gap: 0.75rem; width: 100%; max-width: 250px;">
+                        <input type="email" placeholder="Email Address" required style="width: 100%; height: 45px; padding: 0 1.25rem; border: 1px solid var(--border); border-radius: 50px; background: transparent; color: var(--text-primary); outline: none; font-family: var(--font-body); font-size: 0.875rem;">
+                        <button type="submit" style="width: 100%; height: 45px; padding: 0 1.25rem; border: 1px solid var(--accent-primary); border-radius: 50px; background: transparent; color: var(--accent-primary); font-weight: 500; cursor: pointer; transition: all 0.3s ease; font-family: var(--font-body); font-size: 0.875rem;" onmouseover="this.style.background='var(--accent-primary)'; this.style.color='#fff';" onmouseout="this.style.background='transparent'; this.style.color='var(--accent-primary)';">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                &copy; 2026 Homeschool Co-Op & Resource Center. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL: JOIN CO-OP -->
+    <div class="modal-overlay" id="modal-join">
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Close Modal">&times;</button>
+            <h3 class="mb-2">Join the Co-Op</h3>
+            <p class="mb-6 text-sm">Become part of our growing homeschool community.</p>
+            
+            <form id="join-form">
+                <div class="form-group">
+                    <label class="form-label">Parent Name</label>
+                    <input type="text" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-control" required>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="form-group">
+                        <label class="form-label">Number of Children</label>
+                        <select class="form-control">
+                            <option>1</option><option>2</option><option>3</option><option>4+</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Membership Interest</label>
+                        <select class="form-control">
+                            <option>Community</option><option>Explorer</option><option>Collaborator</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Learning Interests</label>
+                    <input type="text" class="form-control" placeholder="e.g. Science, Art, Reading">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Enrollment Request</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/interactions.js"></script>
+    <script>
+        // Path Selector Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const buttons = document.querySelectorAll('.path-btn');
+            const title = document.getElementById('path-title');
+            const desc = document.getElementById('path-desc');
+            const img = document.getElementById('path-img');
+            const eyebrow = document.getElementById('path-eyebrow');
+
+            const data = {
+                stem: {
+                    eyebrow: 'Science & Tech',
+                    title: 'STEM Exploration',
+                    desc: 'Hands-on experiments, coding fundamentals, and mathematical problem-solving for curious minds.',
+                    img: 'assets/images/Science & Tech.png'
+                },
+                arts: {
+                    eyebrow: 'Creative Expression',
+                    title: 'Arts & Design',
+                    desc: 'Painting, sculpture, digital art, and creative storytelling to express imagination.',
+                    img: 'assets/images/Creative Expression.png'
+                },
+                reading: {
+                    eyebrow: 'Literature',
+                    title: 'Reading & Humanities',
+                    desc: 'Deep dives into classic literature, creative writing workshops, and historical context.',
+                    img: 'assets/images/Literature.png'
+                },
+                nature: {
+                    eyebrow: 'Outdoor Learning',
+                    title: 'Nature & Environment',
+                    desc: 'Outdoor classrooms, biology field trips, and sustainable living projects.',
+                    img: 'assets/images/Outdoor Learning.png'
+                }
+            };
+
+            buttons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    buttons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    const target = btn.getAttribute('data-target');
+                    const info = data[target];
+                    
+                    // Simple fade effect
+                    const content = document.getElementById('path-content');
+                    content.style.opacity = 0;
+                    setTimeout(() => {
+                        eyebrow.textContent = info.eyebrow;
+                        title.textContent = info.title;
+                        desc.textContent = info.desc;
+                        img.src = info.img;
+                        content.style.opacity = 1;
+                    }, 200);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
