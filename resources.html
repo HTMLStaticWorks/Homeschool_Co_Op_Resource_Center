@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resources | Homeschool Co-Op</title>
-    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="assets/images/logo.svg" type="image/svg+xml">
     <link rel="stylesheet" href="assets/css/style.css">
     <style>
 
@@ -30,6 +30,17 @@
             border-color: var(--accent-primary);
         }
 
+        @media (max-width: 768px) {
+            .resource-nav {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .resource-nav-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
         .resource-card {
             background: var(--bg-surface);
             border-radius: var(--radius-md);
@@ -37,6 +48,11 @@
             border: 1px solid var(--border-light);
             display: flex; flex-direction: column;
             transition: var(--transition);
+            height: 100%;
+        }
+        .resource-card > .flex.justify-between {
+            margin-top: auto !important;
+            padding-top: 1.5rem !important;
         }
         .resource-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
         .resource-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
@@ -97,7 +113,7 @@
                 <button class="btn-icon" id="rtl-toggle" aria-label="Toggle RTL">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
                 </button>
-                <a href="login.html" class="btn btn-secondary">Login</a>
+                <a href="login.html" class="btn btn-primary">Parent Login</a>
             </div>
             <button class="hamburger" id="hamburger" aria-label="Menu">
                 <span></span><span></span><span></span>

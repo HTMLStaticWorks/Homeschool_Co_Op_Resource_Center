@@ -52,12 +52,12 @@
   --bg-surface: #222E2A;
   --bg-elevated: rgba(34, 46, 42, 0.85);
 
-  --text-primary: #F9F6F0;
-  --text-secondary: #D1D5DB;
-  --text-muted: #9CA3AF;
+  --text-primary: #FFFFFF;     /* Brightest White */
+  --text-secondary: #F3F4F6;   /* Very Bright Gray */
+  --text-muted: #E5E7EB;       /* Bright Gray */
 
-  --accent-primary: #8EA896;   /* Sage becomes primary accent */
-  --accent-primary-hover: #A4BDB1;
+  --accent-primary: #2D5A4C;   /* Deep Forest Green */
+  --accent-primary-hover: #3B7260;
   --accent-secondary: #D49A89; 
   --accent-secondary-hover: #E3B3A5;
   
@@ -275,7 +275,7 @@ img {
 
 [data-theme="dark"] .btn-primary {
   background-color: var(--accent-primary);
-  color: #121816;
+  color: #fff;
 }
 [data-theme="dark"] .btn-primary:hover {
   background-color: var(--accent-primary-hover);
@@ -286,7 +286,7 @@ img {
 }
 [data-theme="dark"] .btn-secondary:hover {
   background-color: var(--accent-primary);
-  color: #121816;
+  color: #fff;
 }
 
 .btn-icon {
@@ -863,4 +863,71 @@ select.form-control {
 }
 .category-card h3 {
   color: #FFFFFF !important;
+}
+
+/* ==========================================================================
+   SCROLL TO TOP BUTTON
+   ========================================================================== */
+#scroll-to-top {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 50px;
+  height: 50px;
+  background-color: var(--accent-primary);
+  color: #ffffff;
+  border: none;
+  border-radius: 50%;
+  box-shadow: var(--shadow-lg);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+#scroll-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+#scroll-to-top:hover {
+  background-color: var(--accent-secondary);
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="dark"] #scroll-to-top {
+  background-color: var(--accent-primary);
+  color: #ffffff;
+}
+
+[data-theme="dark"] #scroll-to-top:hover {
+  background-color: var(--accent-secondary);
+}
+
+@media (max-width: 768px) {
+  #scroll-to-top {
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 45px;
+    height: 45px;
+  }
+}
+
+/* 1024px specific layout for 3-card testimonials */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .testimonials-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .testimonials-grid > div:nth-child(3) {
+    grid-column: 1 / -1 !important;
+    width: calc(50% - 1rem) !important;
+    margin: 0 auto !important;
+  }
 }
