@@ -390,6 +390,9 @@ img {
 .nav-link:hover, .nav-link.active {
   color: var(--accent-primary);
 }
+[data-theme="dark"] .nav-link:hover, [data-theme="dark"] .nav-link.active {
+  color: #6ee7b7;
+}
 
 .nav-link::after {
   content: '';
@@ -459,6 +462,9 @@ img {
 .dropdown-link:hover, .dropdown-link.active {
   background: rgba(142,168,150,0.1);
   color: var(--accent-primary);
+}
+[data-theme="dark"] .dropdown-link:hover, [data-theme="dark"] .dropdown-link.active {
+  color: #6ee7b7;
 }
 
 .nav-actions {
