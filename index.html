@@ -70,6 +70,16 @@
             color: #fb923c;
         }
 
+        /* Better contrast for primary-color buttons/text in hero dark mode */
+        [data-theme="dark"] .hero {
+            --accent-primary: #4ade80; /* Lighter green for contrast */
+            --accent-primary-hover: #22c55e;
+        }
+        [data-theme="dark"] .hero .btn-primary {
+            color: #121816; /* Dark text on bright background */
+        }
+
+
         /* How it works */
         .pathway-grid {
             position: relative;
@@ -261,8 +271,8 @@
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dropdown-arrow" style="transition: transform 0.3s;"><polyline points="6 9 12 15 18 9"></polyline></svg>
                 </button>
                 <div class="mobile-nav-dropdown-menu" id="mobile-home-dropdown-menu" style="display: none; flex-direction: column; align-items: center; gap: 1rem; margin-top: 1rem;">
-                    <a href="index.html" class="mobile-nav-link active" style="font-size: 1.5rem; color: var(--text-secondary);">Home 1</a>
-                    <a href="home-2.html" class="mobile-nav-link " style="font-size: 1.5rem; color: var(--text-secondary);">Home 2</a>
+                    <a href="index.html" class="mobile-nav-link active" style="font-size: 1.5rem;">Home 1</a>
+                    <a href="home-2.html" class="mobile-nav-link" style="font-size: 1.5rem;">Home 2</a>
                 </div>
             </div>
             <a href="about.html" class="mobile-nav-link ">About</a>

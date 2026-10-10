@@ -80,6 +80,9 @@
 html {
   font-size: 16px;
   scroll-behavior: smooth;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 body {
@@ -90,6 +93,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: background-color 0.3s ease, color 0.3s ease;
+  width: 100%;
+  max-width: 100%;
   overflow-x: hidden;
 }
 
@@ -166,18 +171,38 @@ img {
 }
 
 .page-hero {
-  padding: 8rem 0 4rem;
+  min-height: 550px;
+  padding: 6rem 0;
+  justify-content: center;
   text-align: center;
-  background: var(--bg-secondary);
+  background-color: var(--bg-secondary);
+  background-size: cover;
+  background-position: center;
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 }
+
+.page-hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(255, 255, 255, 0.7);
+  z-index: 0;
+}
+
+[data-theme="dark"] .page-hero::before {
+  background: rgba(26, 36, 33, 0.85);
+}
+
 .page-hero .container {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+  position: relative;
+  z-index: 1;
 }
 .page-hero .eyebrow {
   margin: 0 auto;
@@ -472,12 +497,24 @@ img {
   align-items: center;
   gap: 1rem;
 }
-.nav-actions .btn-icon {
-  border: 1px solid var(--border);
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+
+/* Ensure consistent height and corner radius for header/navbar buttons */
+.nav-actions .btn,
+.nav-actions .btn-icon,
+.mobile-nav-actions .btn,
+.mobile-nav-actions .btn-icon {
+  height: 46px;
+  border-radius: var(--radius-pill);
+  padding-top: 0;
+  padding-bottom: 0;
 }
+
+.nav-actions .btn-icon,
+.mobile-nav-actions .btn-icon {
+  width: 46px;
+  border: 1px solid var(--border);
+}
+
 @media (min-width: 1025px) {
   .nav-actions {
     display: flex;
@@ -547,6 +584,16 @@ img {
   font-family: var(--font-heading);
   font-size: 2rem;
   color: var(--text-primary);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.mobile-nav-link:hover, .mobile-nav-link.active {
+  color: var(--accent-primary);
+}
+
+[data-theme="dark"] .mobile-nav-link:hover, [data-theme="dark"] .mobile-nav-link.active {
+  color: #6ee7b7;
 }
 
 .mobile-nav-actions {
