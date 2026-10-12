@@ -205,8 +205,14 @@ img {
   z-index: 1;
 }
 .page-hero .eyebrow {
+  color: #ea580c;
+  font-weight: 700;
   margin: 0 auto;
   display: inline-block;
+}
+
+[data-theme="dark"] .page-hero .eyebrow {
+  color: #fb923c;
 }
 .page-hero h1 {
   margin-left: auto;
